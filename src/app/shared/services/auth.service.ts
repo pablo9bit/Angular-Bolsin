@@ -33,40 +33,40 @@ export class AuthService {
   }
 
   // Sign in with email/password
-  SignIn(email: any, password: any) {
-    return this.afAuth.signInWithEmailAndPassword(email, password)
-      .then((result: any) => {
-        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
-        });
-        this.SetUserData(result.user);
-      }).catch((error: any) => {
-        window.alert(error.message)
-      })
+  async SignIn(email: any, password: any) {
+    try {
+      const result = await this.afAuth.signInWithEmailAndPassword(email, password);
+      this.ngZone.run(() => {
+        this.router.navigate(['/dashboard']);
+      });
+      this.SetUserData(result.user);
+    } catch (error) {
+      window.alert(error.message);
+    }
   }
 
   // Sign up with email/password
-  SignUp(email: any, password: any) {
-    return this.afAuth.createUserWithEmailAndPassword(email, password)
-      .then((result: any) => {
-        /* Call the SendVerificaitonMail() function when new user sign
-        up and returns promise */
-       // this.SendVerificationMail();
-        this.SetUserData(result.user);
-      }).catch((error: any) => {
-        window.alert(error.message)
-      })
+  async SignUp(email: any, password: any) {
+    try {
+      const result = await this.afAuth.createUserWithEmailAndPassword(email, password);
+      /* Call the SendVerificaitonMail() function when new user sign
+      up and returns promise */
+      // this.SendVerificationMail();
+      this.SetUserData(result.user);
+    } catch (error) {
+      window.alert(error.message);
+    }
   }
 
   
   // Reset Forggot password
-  ForgotPassword(passwordResetEmail: any) {
-    return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
-    .then(() => {
+  async ForgotPassword(passwordResetEmail: any) {
+    try {
+      await this.afAuth.sendPasswordResetEmail(passwordResetEmail);
       window.alert('Password reset email sent, check your inbox.');
-    }).catch((error:any) => {
-      window.alert(error)
-    })
+    } catch (error) {
+      window.alert(error);
+    }
   }
 
   // Returns true when user is looged in and email is verified
@@ -81,16 +81,16 @@ export class AuthService {
   }
 
   // Auth logic to run auth providers
-  AuthLogin(provider: any) {
-    return this.afAuth.signInWithPopup(provider)
-    .then((result: any) => {
-       this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
-        })
+  async AuthLogin(provider: any) {
+    try {
+      const result = await this.afAuth.signInWithPopup(provider);
+      this.ngZone.run(() => {
+        this.router.navigate(['dashboard']);
+      });
       this.SetUserData(result.user);
-    }).catch((error : any) => {
-      window.alert(error)
-    })
+    } catch (error) {
+      window.alert(error);
+    }
   }
 
   /* Setting up user data when sign in with username/password,
@@ -111,11 +111,10 @@ export class AuthService {
   }
 
   // Sign out
-  SignOut() {
-    return this.afAuth.signOut().then(() => {
-      localStorage.removeItem('user');
-      this.router.navigate(['sign-in']);
-    })
+  async SignOut() {
+    await this.afAuth.signOut();
+    localStorage.removeItem('user');
+    this.router.navigate(['sign-in']);
   }
 
 }

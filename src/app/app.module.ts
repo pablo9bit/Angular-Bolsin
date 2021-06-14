@@ -40,6 +40,7 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
+import { GuardGuard } from './components/autentificacion/guard.guard';
 
 export function validateRequired(err, field: FormlyFieldConfig) {
   return `${field.key} es requerido`;
@@ -124,7 +125,7 @@ export function IpValidatorMessage(err, field: FormlyFieldConfig) {
     AngularFirestoreModule,
 	
   ],
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }, GuardGuard ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   entryComponents: [],
